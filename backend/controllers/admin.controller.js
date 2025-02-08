@@ -43,7 +43,7 @@ export const getAdminProfile = async(req,res)=>{
 };
 
 export const createUser = async(req,res)=>{
-    const {fullname,email,password}=req.body;
+    const {fullname,email,password,Stop}=req.body;
     try {
         const userAlreadyExists = await User.findOne({email});
         if(userAlreadyExists){
@@ -54,7 +54,8 @@ export const createUser = async(req,res)=>{
             firstname: fullname.firstname,
             lastname: fullname.lastname,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            Stop
         });
         const token = await user.generateAuthToken();
         res.cookie('token', token, { httpOnly: true });

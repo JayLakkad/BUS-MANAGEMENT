@@ -28,8 +28,11 @@ const driverSchema = new mongoose.Schema({
             type:String,
             required:true,
         }
-
-    }
+    },
+    route:{
+        type:String,
+        required:true,
+    },
 
 })
 driverSchema.methods.generateAuthToken = function(){

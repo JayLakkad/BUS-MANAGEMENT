@@ -14,6 +14,8 @@ import DriverProtectedWrapper from './pages/DriverProtectedWrapper'
 import UserLogout from './pages/UserLogout'
 import DriverLogout from './pages/DriverLogout'
 import AdminLogout from './pages/AdminLogout'
+import CreateStudentID from './pages/CreateStudentID'
+import CreateDriverID from './pages/CreateDriverID'
 
 const App = () => {
   return (
@@ -58,6 +60,8 @@ const App = () => {
             <AdminLogout />
           </AdminProtectedWrapper>
         } />
+        <Route path='/create-student-id' element={<CreateStudentID />} />
+        <Route path='/create-driver-id' element={<CreateDriverID />} />
       </Routes>
     </div>
   )

@@ -43,7 +43,7 @@ export const getAdminProfile = async(req,res)=>{
 };
 
 export const createUser = async(req,res)=>{
-    const {fullname,email,password}=req.body;
+    const {fullname,email,password,Stop}=req.body;
     try {
         const userAlreadyExists = await User.findOne({email});
         if(userAlreadyExists){
@@ -54,7 +54,8 @@ export const createUser = async(req,res)=>{
             firstname: fullname.firstname,
             lastname: fullname.lastname,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            Stop
         });
         const token = await user.generateAuthToken();
         res.cookie('token', token, { httpOnly: true });
@@ -66,7 +67,7 @@ export const createUser = async(req,res)=>{
 };
 
 export const createDriver = async(req,res)=>{
-    const {fullname,email,password,bus} = req.body;
+    const {fullname,email,password,bus,route} = req.body;
     try {
         const driverAlreadyExists = await Driver.findOne({email});
         if(driverAlreadyExists){
@@ -78,7 +79,8 @@ export const createDriver = async(req,res)=>{
             lastname: fullname.lastname,
             email,
             password: hashedPassword,
-            plate: bus.plate
+            plate: bus.plate,
+            route
         });
         const token = await driver.generateAuthToken();
         res.cookie('token', token, { httpOnly: true });

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { AdminDataContext } from '../context/AdminContext'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const AdminProtectedWrapper = ({children}) => {
     const token = localStorage.getItem('token')
@@ -34,7 +35,22 @@ const AdminProtectedWrapper = ({children}) => {
     },[token])
 
     if(isLoading){
-        return <div>Loading...</div>
+        return (
+            <div className="w-full h-screen relative flex flex-col justify-center items-center">
+                <div className="absolute top-4 right-4">
+                    <Skeleton className="h-10 w-10 rounded-full bg-gray-300" />
+                </div>
+                <div className='absolute top-52 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full'>
+                    <div className="flex flex-col justify-end items-center w-full h-full space-y-3">
+                        <Skeleton className="h-[20%] w-[80%] rounded-xl bg-gray-300" />
+                        <Skeleton className="h-[20%] w-[80%] rounded-xl bg-gray-300" />
+                    </div>
+                </div>
+                <div className='absolute left-0 bottom-0 h-[10%] w-full'>
+                    <Skeleton className="h-full w-full bg-gray-300" />
+                </div>
+            </div>
+        )
     }
 
     return (

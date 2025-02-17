@@ -42,7 +42,7 @@ const DriverHome = () => {
   return (
     <div className="w-full h-screen bg-gray-100 relative overflow-hidden">
       {/* Dropdown Menu */}
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 z-[100]">
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="w-10 h-10 flex items-center justify-center rounded-full bg-black text-white font-bold uppercase">

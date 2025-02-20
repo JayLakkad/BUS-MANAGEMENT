@@ -3,10 +3,12 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 const MapView = ({ driverLocation }) => {
-    const defaultCenter = [20.5937, 78.9629]; // Default to India
+    const defaultCenter = [22.307159, 73.181221]; // Default to India
+    
 
     return (
         <MapContainer
+
             center={driverLocation ? [driverLocation.latitude, driverLocation.longitude] : defaultCenter}
             zoom={13}
             style={{ height: "100vh", width: "100%", zIndex: 0, position: "absolute", bottom: 0 }}

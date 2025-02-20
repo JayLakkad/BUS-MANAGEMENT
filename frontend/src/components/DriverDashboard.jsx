@@ -7,25 +7,32 @@ const DriverDashboard = () => {
   const [isTripStarted, setIsTripStarted] = useState(false);
 
   const startTrip = () => {
-    if (routeName) {
-      socket.emit("start-trip", { driverId: "driver123", routeName });
-      setIsTripStarted(true);
-      console.log("Trip started on route:", routeName);
+    if (!routeName) {
+      console.error("Route name is not set.");
+      return;
     }
+    socket.emit("start-trip", { driverId: "driver123", routeName });
+    setIsTripStarted(true);
+    console.log("Trip started on route:", routeName);
+    updateLocation(); // Send location immediately after starting the trip
   };
 
   const updateLocation = () => {
+    if (!routeName) {
+      console.error("Route name is not set.");
+      return;
+    }
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          socket.emit("update-location", {
+          socket.emit("update-location", { // Changed from "bus-location" to "update-location"
             driverId: "driver123",
             routeName,
             latitude,
             longitude,
           });
-          console.log("Driver's location sent:", { latitude, longitude });
+          console.log("Driver's location sent:", { latitude, longitude,routeName });
         },
         (error) => {
           console.error("Error getting location:", error);
@@ -37,12 +44,14 @@ const DriverDashboard = () => {
   };
 
   useEffect(() => {
-    let interval;
+    let interval = null;
     if (isTripStarted) {
       updateLocation(); // Send location immediately after starting the trip
-      interval = setInterval(updateLocation, 1500); // Send location every 5 seconds
+      interval = setInterval(updateLocation, 1500); // Send location every 1.5 seconds
     }
-    return () => clearInterval(interval); // Cleanup interval
+    return () => {
+      if (interval) clearInterval(interval); // Cleanup interval
+    };
   }, [isTripStarted]);
 
   return (

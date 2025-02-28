@@ -51,14 +51,14 @@ const DriverDashboard = () => {
         }
     };
 
-    useEffect(() => {
-        return () => {
-            // Cleanup geolocation when component unmounts
-            if (watchId !== null) {
-                navigator.geolocation.clearWatch(watchId);
-            }
-        };
-    }, [watchId]);
+  useEffect(() => {
+    let interval;
+    if (isTripStarted) {
+      updateLocation(); // Send location immediately after starting the trip
+      interval = setInterval(updateLocation, 1500); // Send location every 5 seconds
+    }
+    return () => clearInterval(interval); // Cleanup interval
+  }, [isTripStarted]);
 
     return (
         <div>

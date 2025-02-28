@@ -1,30 +1,44 @@
 import React, { useState, useEffect } from "react";
-import socket from "./socket";
+import io from "socket.io-client";
 import MapView from "./MapView";
+
+const socket = io("http://localhost:5000"); // Adjust the URL as necessary
 
 const UserDashboard = () => {
   const [stopName, setStopName] = useState("");
   const [driverLocation, setDriverLocation] = useState(null);
 
   const joinRoute = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
     if (stopName) {
       socket.emit("join-route", { studentId: "student456", stopName });
-      console.log("Joined route at stop:", stopName);
+      console.log("📩 Sent join-route event with stop:", stopName);
       setStopName("");
     }
   };
 
   useEffect(() => {
-    // Listen for updates to the driver's location
-    socket.on("update-location", (location) => {
-      setDriverLocation(location); // Update state with the driver's location
-      console.log("Driver location received:", location);
+    console.log("🟡 Attempting to connect to WebSocket...");
+
+    socket.on("bus-location", (location) => {
+      console.log("📡 Received bus-location event");
+      console.debug("🛠️ Raw location data:", location);
+      if (location && typeof location.latitude === "number" && typeof location.longitude === "number") {
+        console.log("✅ Driver location received:", location);
+        setDriverLocation(location);
+      } else {
+        console.error("❌ Invalid driver location received:", location);
+      }
+    });
+    console.log("🟢 bus-location event listener added");
+
+    socket.on("disconnect", (reason) => {
+      console.warn("❌ Disconnected from WebSocket server:", reason);
     });
 
     return () => {
-      // Clean up the socket listener when the component unmounts
-      socket.off("update-location");
+      socket.off("bus-location");
+      socket.off("disconnect");
     };
   }, []);
 
@@ -44,9 +58,7 @@ const UserDashboard = () => {
             <button
               type="submit"
               className={`w-full py-2 px-4 text-white font-semibold rounded-lg ${
-                stopName
-                  ? "bg-green-500 hover:bg-green-600"
-                  : "bg-gray-300 cursor-not-allowed"
+                stopName ? "bg-green-500 hover:bg-green-600" : "bg-gray-300 cursor-not-allowed"
               }`}
               disabled={!stopName}
             >
@@ -55,8 +67,7 @@ const UserDashboard = () => {
           </form>
         </div>
       </div>
-      {/* Pass driver's location to MapView */}
-      <MapView driverLocation={driverLocation} />
+      {driverLocation && <MapView driverLocation={driverLocation} />}
     </div>
   );
 };

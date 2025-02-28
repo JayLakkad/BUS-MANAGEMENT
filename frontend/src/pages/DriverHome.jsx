@@ -45,7 +45,7 @@ const DriverHome = () => {
       <div className="absolute top-4 right-4 z-[100]">
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-black text-white font-bold uppercase">
+            <div className="w-12 h-12 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-black text-white font-bold uppercase">
               {driverData?.driver?.fullname?.firstname[0]}
               {driverData?.driver?.fullname?.lastname[0]}
             </div>
